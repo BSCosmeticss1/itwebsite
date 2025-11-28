@@ -1,0 +1,33 @@
+node_modules/
+.next/
+out/
+build/
+.next/cache
+
+# Local env files
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editors/IDE
+.vscode/
+.idea/
+
+# Test / coverage
+coverage/
+
+# Cache / build
+.cache/
+dist/
+public/static/
+
+# TypeScript
+*.tsbuildinfo
