@@ -4,8 +4,8 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div>
-            <h3 className="font-bold text-lg mb-4">Vertex</h3>
-            <p className="text-foreground/60 text-sm">Enterprise IT solutions for tomorrow's businesses</p>
+            <h3 className="font-bold text-lg mb-4">Techweight</h3>
+            <p className="text-foreground/60 text-sm">Empowering businesses with technology</p>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Solutions</h4>
@@ -70,7 +70,7 @@ export function Footer() {
         </div>
         <div className="divider-line mb-8"></div>
         <div className="flex flex-col md:flex-row justify-between items-center text-sm text-foreground/60">
-          <p>&copy; 2025 Vertex. All rights reserved.</p>
+          <p>&copy; 2025 Techweight. All rights reserved.</p>
           <div className="flex gap-4 mt-4 md:mt-0">
             <a href="#" className="hover:text-primary transition">
               Twitter
