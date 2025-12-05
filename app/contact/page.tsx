@@ -122,7 +122,7 @@ export default function Contact() {
 
                   <button
                     type="submit"
-                    className="w-full px-6 py-3 bg-gradient-to-r from-primary to-accent rounded-lg font-semibold text-primary-foreground hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 hover:scale-105 inline-flex items-center justify-center gap-2"
+                    className="w-full px-6 py-3 bg-primary rounded-lg font-semibold text-primary-foreground hover:shadow-lg transition-all duration-300 hover:scale-105 inline-flex items-center justify-center gap-2"
                   >
                     Send Message
                     <Send size={20} />

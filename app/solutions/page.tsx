@@ -128,7 +128,7 @@ export default function Solutions() {
                           {study.metrics.map((metric, midx) => (
                             <div
                               key={midx}
-                              className="bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 rounded-lg p-4 text-center"
+                              className="bg-primary/10 border border-border rounded-lg p-4 text-center"
                             >
                               <div className="text-2xl font-bold text-primary">{metric.value}</div>
                               <div className="text-sm text-foreground/70">{metric.label}</div>
@@ -151,12 +151,12 @@ export default function Solutions() {
 
         {/* Bottom CTA */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto animate-fade-in-up">
-          <div className="bg-gradient-to-r from-primary/20 to-accent/20 border border-primary/30 rounded-2xl p-12 text-center">
+          <div className="bg-card border border-border rounded-2xl p-12 text-center">
             <h2 className="text-3xl font-bold mb-4">Want to Learn More?</h2>
             <p className="text-foreground/70 mb-8 max-w-2xl mx-auto">
               Discover how we can deliver similar transformative results for your organization.
             </p>
-            <button className="px-8 py-3 bg-primary rounded-lg font-semibold text-primary-foreground hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 hover:scale-105 smooth-hover">
+            <button className="px-8 py-3 bg-primary rounded-lg font-semibold text-primary-foreground hover:shadow-lg transition-all duration-300 hover:scale-105 smooth-hover">
               Schedule Demo
             </button>
           </div>

@@ -4,13 +4,107 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel"
 import Link from "next/link"
-import { ArrowRight, Zap, Shield, TrendingUp, CheckCircle, Sparkles, Target, Globe, Clock, Users, BarChart, Cpu, Settings, Leaf, Layers, Building2 } from "lucide-react"
+import Image from "next/image"
+import { ArrowRight, Zap, Shield, TrendingUp, CheckCircle, Sparkles, Target, Globe, Clock, Users, BarChart, Cpu, Settings, Leaf, Layers, Building2, ChevronRight, Menu, X } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
+
+// Custom Navigation component matching the image design
+function ImageStyleNavigation() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Services", href: "/services" },
+    { name: "Projects", href: "/projects" },
+    { name: "Workshop", href: "/workshop" },
+    { name: "Careers", href: "/careers" },
+    { name: "Contact", href: "/contact" },
+  ]
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-24">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link href="/" aria-label="Techweight home" className="inline-flex items-center">
+              <Image src="/thujn.jpeg" alt="Techweight logo" width={96} height={96} className="rounded-full object-cover ring-4 ring-primary" />
+            </Link>
+          </div>
+
+          {/* Desktop Navigation Links - Centered */}
+          <div className="hidden md:flex items-center justify-center flex-1">
+            <div className="flex items-center space-x-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop CTA Button */}
+          <div className="hidden md:flex items-center space-x-4">
+            <Link
+              href="/contact"
+              className="px-6 py-2 bg-primary text-white text-sm font-medium rounded-full hover:bg-primary/90 transition-colors"
+            >
+              Get Started
+            </Link>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <div className="md:hidden border-t border-gray-100">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              ))}
+              <div className="pt-4 border-t border-gray-100">
+                <Link
+                  href="/contact"
+                  className="block px-3 py-2 bg-primary text-white text-center rounded-lg hover:bg-primary/90"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Get Started
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  )
+}
 
 function AnimatedCounter({ value, suffix = '', duration = 1500 }: { value: number; suffix?: string; duration?: number }) {
   const [count, setCount] = useState(0)
   const ref = useRef<HTMLDivElement | null>(null)
   const [started, setStarted] = useState(false)
+  
   useEffect(() => {
     const io = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !started) {
@@ -24,11 +118,13 @@ function AnimatedCounter({ value, suffix = '', duration = 1500 }: { value: numbe
         requestAnimationFrame(step)
       }
     }, { threshold: 0.6 })
+    
     if (ref.current) io.observe(ref.current)
     return () => io.disconnect()
   }, [value, duration, started])
+  
   return (
-    <div ref={ref} className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+    <div ref={ref} className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary via-primary/90 to-accent bg-clip-text text-transparent">
       {count}{suffix}
     </div>
   )
@@ -45,24 +141,9 @@ export default function Home() {
 
   useEffect(() => {
     if (!emblaApi) return
-    const onSelect = () => setActiveSlide(emblaApi.selectedScrollSnap())
-    onSelect()
-    emblaApi.on('select', onSelect)
-    return () => {
-      emblaApi.off('select', onSelect as any)
-    }
-  }, [emblaApi])
-
-  useEffect(() => {
-    if (!emblaApi) return
     const interval = setInterval(() => {
-      if (!emblaApi) return
-      if (emblaApi.canScrollNext()) {
-        emblaApi.scrollNext()
-      } else {
-        emblaApi.scrollTo(0)
-      }
-    }, 7000)
+      emblaApi.scrollNext()
+    }, 5000)
     return () => clearInterval(interval)
   }, [emblaApi])
 
@@ -71,25 +152,25 @@ export default function Home() {
       icon: Sparkles,
       title: "Innovative Problem Solving",
       description: "Engineer solutions beyond specs to streamline workflows, cut costs, and scale.",
-      gradient: "from-pink-500 to-rose-400",
+      gradient: "from-primary to-accent",
     },
     {
       icon: TrendingUp,
       title: "Lifecycle Optimization",
       description: "Optimize from concept to post‑implementation with continuous improvements and efficiency.",
-      gradient: "from-violet-500 to-purple-400",
+      gradient: "from-primary to-accent",
     },
     {
       icon: Users,
       title: "Collaboration",
       description: "Co‑develop with your teams to integrate with current processes and future needs.",
-      gradient: "from-blue-500 to-cyan-400",
+      gradient: "from-primary to-accent",
     },
     {
       icon: Cpu,
       title: "Technology Integration",
       description: "AI automation and digital twins for predictive maintenance and added value.",
-      gradient: "from-emerald-500 to-teal-400",
+      gradient: "from-primary to-accent",
     },
   ]
 
@@ -101,14 +182,37 @@ export default function Home() {
   ]
 
   const technologies = [
-    { name: "AWS", description: "Cloud Infrastructure", icon: "☁️" },
-    { name: "Kubernetes", description: "Container Orchestration", icon: "⚓" },
-    { name: "TensorFlow", description: "Machine Learning", icon: "🧠" },
-    { name: "React", description: "Frontend Development", icon: "⚛️" },
-    { name: "Node.js", description: "Backend Services", icon: "🚀" },
-    { name: "PostgreSQL", description: "Data Management", icon: "🗄️" },
-    { name: "Redis", description: "Caching Layer", icon: "⚡" },
-    { name: "Docker", description: "Containerization", icon: "🐳" },
+    { name: "AWS", description: "Cloud Infrastructure", icon: "☁️", color: "from-orange-500 to-yellow-500" },
+    { name: "Kubernetes", description: "Container Orchestration", icon: "⚓", color: "from-blue-500 to-cyan-500" },
+    { name: "TensorFlow", description: "Machine Learning", icon: "🧠", color: "from-orange-600 to-yellow-600" },
+    { name: "React", description: "Frontend Development", icon: "⚛️", color: "from-cyan-500 to-blue-500" },
+    { name: "Node.js", description: "Backend Services", icon: "🚀", color: "from-green-500 to-emerald-500" },
+    { name: "PostgreSQL", description: "Data Management", icon: "🗄️", color: "from-blue-600 to-indigo-600" },
+    { name: "Redis", description: "Caching Layer", icon: "⚡", color: "from-red-500 to-orange-500" },
+    { name: "Docker", description: "Containerization", icon: "🐳", color: "from-blue-400 to-cyan-400" },
+  ]
+
+  const heroSlides = [
+    {
+      title: "Techweight – Empowering Businesses with Technology",
+      image: "/fintech-office-dashboard.jpg"
+    },
+    {
+      title: "Your business is our business.",
+      image: "/professional-male-solutions-architect.jpg"
+    },
+    {
+      title: "What Makes Us Different (USP)",
+      image: "/manufacturing-smart-factory.jpg"
+    },
+    {
+      title: "We ensure 99% uptime",
+      image: "/professional-female-cloud-engineer.jpg"
+    },
+    {
+      title: "Bring out the best in your business with Techweighten",
+      image: "/retail-store-technology.png"
+    }
   ]
 
   const benefits = [
@@ -177,147 +281,109 @@ export default function Home() {
     },
   ]
 
-  const slides = [
-    {
-      title: "Techweight – Empowering Businesses with Technology",
-      subtitle: "Bring out the best in your business with Techweighten",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1920&q=80",
-    },
-    {
-      title: "Your business is our business.",
-      subtitle: "Strategic technology tailored for growth and resilience",
-      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80",
-    },
-    {
-      title: "What Makes Us Different (USP)",
-      subtitle: "Speed, security, and scalability — without compromise",
-      image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1920&q=80",
-    },
-    {
-      title: "We ensure 99% uptime",
-      subtitle: "Reliability engineered across cloud, network, and apps",
-      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1920&q=80",
-    },
-  ]
-
   const processSteps = [
-    { step: "01", title: "Discovery", desc: "Deep dive into your business needs and goals", icon: "🔍" },
-    { step: "02", title: "Strategy", desc: "Architect comprehensive, scalable solutions", icon: "📐" },
-    { step: "03", title: "Execution", desc: "Precision implementation with agile methodology", icon: "⚡" },
-    { step: "04", title: "Support", desc: "Continuous optimization and growth partnership", icon: "🔄" },
+    { step: "01", title: "Discovery", desc: "Deep dive into your business needs and goals", icon: "🔍", color: "from-blue-500 to-cyan-500" },
+    { step: "02", title: "Strategy", desc: "Architect comprehensive, scalable solutions", icon: "📐", color: "from-purple-500 to-pink-500" },
+    { step: "03", title: "Execution", desc: "Precision implementation with agile methodology", icon: "⚡", color: "from-orange-500 to-yellow-500" },
+    { step: "04", title: "Support", desc: "Continuous optimization and growth partnership", icon: "🔄", color: "from-green-500 to-emerald-500" },
   ]
 
   if (!mounted) return null
 
   return (
     <>
-      <Navigation />
-      <main className="pt-16 bg-gradient-to-b from-background via-background to-gray-950">
-        {/* Hero Section */}
-        <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-          {/* Animated Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/20" />
-
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Carousel 
-              className="w-full"
-              setApi={setEmblaApi}
-            >
-              <CarouselContent>
-                {slides.map((s, idx) => (
-                  <CarouselItem key={idx}>
+      <ImageStyleNavigation />
+      <main className="pt-24 bg-background">
+        {/* Hero Section with Carousel */}
+        <section className="relative min-h-[63vh] overflow-hidden">
+          <Carousel
+            setApi={setEmblaApi}
+            className="w-full h-full"
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+          >
+            <CarouselContent className="h-full">
+              {heroSlides.map((slide, index) => (
+                <CarouselItem key={index} className="relative min-h-[63vh] flex items-center justify-center">
+                  {/* Background Image */}
                   <div
-                    className="relative h-[48vh] sm:h-[58vh] lg:h-[65vh] rounded-3xl overflow-hidden border border-border"
+                    className="absolute inset-0 bg-cover bg-center"
                     style={{
-                      backgroundImage: `url(${s.image})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
+                      backgroundImage: `url("${slide.image}")`,
                     }}
                   >
-                    <div className="absolute inset-0">
-                      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-transparent" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20 mix-blend-multiply" />
-                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0.45)_0%,_transparent_65%)]" />
-                    </div>
-                    <div className="relative z-10 flex h-full items-center justify-center text-center px-6">
-                        <div className="max-w-2xl mx-auto space-y-5 rounded-3xl p-5 sm:p-7 bg-background/60/50 backdrop-blur-sm border border-white/10 shadow-xl text-left">
-                          {/* Animated title */}
-                          <div className="space-y-4">
-                            <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white drop-shadow-md">
-                              {s.title}
-                            </h1>
-                            <p className="text-sm sm:text-base text-white/85 font-normal max-w-2xl mx-auto leading-relaxed animate-fade-in-up drop-shadow"
-                               style={{ animationDelay: '0.4s' }}>
-                              {s.subtitle}
-                            </p>
-                          </div>
+                    {/* Blue overlay for brand look */}
+                    <div className="absolute inset-0 bg-blue-900/60" />
 
-                          {/* Animated CTA buttons */}
-                          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up"
-                               style={{ animationDelay: '0.6s' }}>
-                            <Link
-                              href="/contact"
-                              className="group relative px-7 py-3.5 bg-gradient-to-r from-primary to-accent rounded-full font-semibold text-primary-foreground hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 hover:scale-105 inline-flex items-center justify-center gap-3 overflow-hidden"
-                            >
-                              <span className="relative z-10">Get Started</span>
-                              <ArrowRight className="relative z-10 group-hover:translate-x-1 transition-transform" size={20} />
-                              <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            </Link>
-                            <Link
-                              href="/solutions"
-                              className="px-7 py-3.5 border border-primary/60 rounded-full font-semibold text-white hover:bg-white/10 transition-all duration-300"
-                            >
-                              Explore Solutions
-                            </Link>
-                          </div>
-                        </div>
+                    {/* Subtle blue gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 via-blue-700/50 to-blue-600/30" />
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <div className="max-w-4xl mx-auto space-y-8">
+                      {/* Main Headline */}
+                      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight">
+                        {slide.title}
+                      </h1>
+
+                      {/* Subtitle */}
+                      <p className="text-lg sm:text-xl text-gray-200 font-light max-w-2xl mx-auto leading-relaxed">
+                        Trusted by industry leaders worldwide
+                      </p>
+
+                      {/* CTA Buttons */}
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+                        <Link
+                          href="/contact"
+                          className="group relative px-8 py-3.5 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full font-semibold hover:shadow-2xl hover:shadow-orange-600/30 transition-all duration-300 hover:scale-105 inline-flex items-center justify-center gap-3"
+                        >
+                          <span>Get Started</span>
+                          <ArrowRight className="group-hover:translate-x-1 transition-transform" size={20} />
+                        </Link>
+
+                        <Link
+                          href="/contact"
+                          className="px-8 py-3.5 bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 transition-all duration-300 inline-flex items-center justify-center"
+                        >
+                          Contact
+                        </Link>
                       </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-6 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-md border border-border hover:bg-background" />
-              <CarouselNext className="right-6 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-md border border-border hover:bg-background" />
-              
-              {/* Custom indicators */}
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-                {slides.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => emblaApi?.scrollTo(idx)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      activeSlide === idx 
-                        ? 'w-8 bg-gradient-to-r from-primary to-accent' 
-                        : 'bg-foreground/30 hover:bg-foreground/50'
-                    }`}
-                  />
-                ))}
-              </div>
-            </Carousel>
-          </div>
 
-          {/* Floating elements */}
-          <div className="absolute bottom-10 left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute top-10 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+                      {/* Additional link removed per request */}
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-4" />
+            <CarouselNext className="right-4" />
+          </Carousel>
+
+          {/* Scroll indicator removed */}
         </section>
 
+        {/* Keep the rest of your existing sections */}
         {/* Metrics Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/30 to-transparent" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {metrics.map((metric, idx) => {
               const Icon = metric.icon
               return (
                 <div 
                   key={idx} 
-                  className="group p-6 bg-gray-900/40 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-gray-700 transition-all duration-500 hover:scale-[1.03] animate-fade-in-up"
+                  className="group p-8 bg-gradient-to-b from-card to-card/50 backdrop-blur-sm border border-border/50 rounded-2xl hover:border-primary/50 transition-all duration-500 hover:scale-[1.03] hover:shadow-xl hover:shadow-primary/10"
                   style={{ animationDelay: `${idx * 0.1}s` }}
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <Icon className="text-gray-400 group-hover:text-blue-400 transition-colors" size={24} />
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all">
+                      <Icon className="text-primary group-hover:scale-110 transition-transform" size={24} />
+                    </div>
                     <AnimatedCounter value={metric.count} suffix={metric.suffix} />
                   </div>
-                  <div className="text-gray-400 group-hover:text-gray-300 transition-colors">
+                  <div className="text-foreground/70 group-hover:text-foreground transition-colors text-lg font-medium">
                     {metric.label}
                   </div>
                 </div>
@@ -328,49 +394,69 @@ export default function Home() {
 
         {/* Service Overview */}
         <section className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
-          <div className="relative z-10 text-center mb-12 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full border border-primary/20 mb-3">
+          {/* Background decoration */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+          
+          <div className="relative z-10 text-center mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 mb-2">
               <Sparkles className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium text-primary">Service Overview</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-bold tracking-tight">
-              We deliver a comprehensive suite of IT solutions
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+              Comprehensive IT Solutions
             </h2>
-            <p className="text-foreground/70 text-base max-w-3xl mx-auto">
-              Tailored for the evolving needs of the company sector.
+            <p className="text-foreground/60 text-lg max-w-3xl mx-auto">
+              Tailored for the evolving needs of modern businesses
             </p>
           </div>
 
-          <div className="relative z-10 grid lg:grid-cols-2 gap-6 items-start">
-            <div className="space-y-5 p-6 rounded-3xl bg-gradient-to-b from-background/60 to-background/30 border border-white/10 backdrop-blur-sm shadow-xl">
-              <h3 className="text-2xl font-semibold">Our Approach</h3>
-              <p className="text-foreground/80 text-sm sm:text-base">
-                Techweight Technologies Enterprises is a technology consulting firm specialised in delivering innovative and efficient IT solutions tailored to our clients’ operational, technical, and business goals. Our focus is on delivering solutions that enhance productivity, optimize resources, and ensure digital transformation through the reliable deployment of technology.
-              </p>
-              <p className="text-foreground/80 text-sm sm:text-base">
-                We understand the critical role of technology in driving business success, and we are committed to helping organisations achieve seamless IT operations through effective system delivery, deployment, and support.
-              </p>
-              <p className="text-foreground/80 text-sm sm:text-base">
-                In today’s fast‑evolving technological landscape, the success of any project hinges on robust, innovative, and sustainable IT solutions. Our IT team is committed to delivering high‑performance results tailored to your specific requirements.
-              </p>
+          <div className="relative z-10 grid lg:grid-cols-2 gap-8 items-start">
+            <div className="space-y-6 p-8 rounded-3xl bg-gradient-to-br from-card to-card/50 border border-border/50 backdrop-blur-sm shadow-xl">
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Our Approach
+                </h3>
+                <div className="space-y-4 text-foreground/70">
+                  <p className="leading-relaxed">
+                    Techweight Technologies Enterprises is a technology consulting firm specialised in delivering innovative and efficient IT solutions tailored to our clients' operational, technical, and business goals.
+                  </p>
+                  <p className="leading-relaxed">
+                    We understand the critical role of technology in driving business success, and we are committed to helping organisations achieve seamless IT operations through effective system delivery, deployment, and support.
+                  </p>
+                  <p className="leading-relaxed">
+                    In today's fast‑evolving technological landscape, the success of any project hinges on robust, innovative, and sustainable IT solutions. Our IT team is committed to delivering high‑performance results tailored to your specific requirements.
+                  </p>
+                </div>
+              </div>
+              
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors group"
+              >
+                <span className="font-medium">Learn more about us</span>
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {[
-                { icon: Settings, title: "Tailored Design & Development", desc: "Solutions aligned to operational goals through close collaboration." },
-                { icon: Cpu, title: "Cutting‑edge Technology", desc: "Latest tools and software for precision, efficiency, and innovation." },
-                { icon: Leaf, title: "Sustainability Focus", desc: "Designed to minimise environmental impact while maximising efficiency." },
-                { icon: Building2, title: "Cross‑Industry Expertise", desc: "Trusted across manufacturing, oil & gas, and diverse sectors." },
+                { icon: Settings, title: "Tailored Design & Development", desc: "Solutions aligned to operational goals through close collaboration.", color: "from-blue-500/10 to-cyan-500/10" },
+                { icon: Cpu, title: "Cutting‑edge Technology", desc: "Latest tools and software for precision, efficiency, and innovation.", color: "from-purple-500/10 to-pink-500/10" },
+                { icon: Leaf, title: "Sustainability Focus", desc: "Designed to minimise environmental impact while maximising efficiency.", color: "from-green-500/10 to-emerald-500/10" },
+                { icon: Building2, title: "Cross‑Industry Expertise", desc: "Trusted across manufacturing, oil & gas, and diverse sectors.", color: "from-orange-500/10 to-yellow-500/10" },
               ].map((item, idx) => {
                 const Icon = item.icon
                 return (
-                  <div key={idx} className="group p-5 rounded-2xl border border-border bg-gradient-to-b from-card/60 to-card/30 hover:border-primary/50 hover:shadow-lg transition-all duration-300">
-                    <div className="mb-4 p-3 rounded-xl bg-gradient-to-r from-primary/20 to-accent/20 w-fit">
+                  <div key={idx} className="group p-6 rounded-2xl border border-border/50 bg-gradient-to-b from-card/50 to-card hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+                    <div className={`mb-4 p-3 rounded-xl bg-gradient-to-br ${item.color} w-fit`}>
                       <Icon className="text-primary" size={22} />
                     </div>
-                    <h4 className="text-lg font-semibold mb-2">{item.title}</h4>
-                    <p className="text-foreground/70 text-sm leading-relaxed">{item.desc}</p>
+                    <h4 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors">
+                      {item.title}
+                    </h4>
+                    <p className="text-foreground/60 text-sm leading-relaxed">
+                      {item.desc}
+                    </p>
                   </div>
                 )
               })}
@@ -378,17 +464,19 @@ export default function Home() {
           </div>
         </section>
 
-        
-
         {/* Features Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 rounded-full border border-blue-500/20 mb-4">
-              <Sparkles className="w-4 h-4 text-blue-400" />
-              <span className="text-sm font-medium text-blue-400">Why Choose Techweight</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 mb-4">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Why Choose Techweight</span>
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">Strategic Approach</h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">Innovation, lifecycle optimization, collaboration, and seamless technology integration.</p>
+            <h2 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              Strategic Excellence
+            </h2>
+            <p className="text-foreground/60 text-lg max-w-2xl mx-auto">
+              Innovation, lifecycle optimization, collaboration, and seamless technology integration
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -397,22 +485,19 @@ export default function Home() {
               return (
                 <div
                   key={idx}
-                  className="group relative p-8 bg-gradient-to-b from-gray-900/50 to-gray-900/20 border border-gray-800 rounded-2xl hover:border-gray-700 transition-all duration-500 hover:scale-[1.02] overflow-hidden"
+                  className="group relative p-8 bg-gradient-to-b from-card to-card/50 border border-border/50 rounded-2xl hover:border-primary/50 transition-all duration-500 hover:scale-[1.02] overflow-hidden"
                 >
-                  {/* Gradient border effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                  {/* Animated gradient border */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
                   
-                  {/* Animated background */}
-                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-800/0 via-gray-800/0 to-gray-800/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
                   <div className="relative z-10">
-                    <div className={`mb-6 p-3 rounded-xl bg-gradient-to-br ${feature.gradient} w-fit shadow-lg`}>
-                      <Icon className="text-white" size={24} />
+                    <div className="mb-6 p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 w-fit">
+                      <Icon className="text-primary" size={24} />
                     </div>
-                    <h3 className="text-xl font-semibold mb-3 text-white group-hover:text-gray-100 transition-colors">
+                    <h3 className="text-xl font-semibold mb-4 group-hover:text-primary transition-colors">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-400 group-hover:text-gray-300 transition-colors leading-relaxed">
+                    <p className="text-foreground/60 group-hover:text-foreground/70 transition-colors leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
@@ -424,32 +509,45 @@ export default function Home() {
 
         {/* Scope of Services */}
         <section className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-primary/5 to-background/0" />
-          <div className="relative z-10 text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20 mb-4">
+          {/* Background pattern */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
+          
+          <div className="relative z-10 text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 mb-4">
               <Sparkles className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium text-primary">Scope of Services</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Full‑stack IT delivery and consulting</h2>
-            <p className="text-foreground/70 max-w-3xl mx-auto mt-3">Techweight Technologies offers comprehensive services across infrastructure, software, support, and advisory.</p>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+              Full‑stack IT Delivery
+            </h2>
+            <p className="text-foreground/60 max-w-3xl mx-auto mt-4 text-lg">
+              Techweight Technologies offers comprehensive services across infrastructure, software, support, and advisory.
+            </p>
           </div>
 
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {serviceScope.map((svc, idx) => {
               const Icon = svc.icon
               return (
-                <div key={idx} className="group p-7 rounded-2xl border border-border bg-card/70 hover:border-primary/50 hover:shadow-xl transition-all">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-r from-primary/20 to-accent/20">
-                      <Icon className="text-primary" size={22} />
+                <div 
+                  key={idx} 
+                  className="group p-7 rounded-2xl border border-border/50 bg-gradient-to-b from-card/50 to-card hover:border-primary/50 hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+                >
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10">
+                      <Icon className="text-primary" size={24} />
                     </div>
-                    <h3 className="text-lg font-semibold">{svc.title}</h3>
+                    <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">
+                      {svc.title}
+                    </h3>
                   </div>
-                  <ul className="space-y-2 text-sm text-foreground/70">
+                  <ul className="space-y-3">
                     {svc.points.map((p, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-primary mt-[2px]" />
-                        <span>{p}</span>
+                      <li key={i} className="flex items-start gap-3">
+                        <div className="mt-1 p-1 rounded-full bg-primary/10">
+                          <CheckCircle className="w-3 h-3 text-primary" />
+                        </div>
+                        <span className="text-foreground/70 text-sm">{p}</span>
                       </li>
                     ))}
                   </ul>
@@ -460,18 +558,17 @@ export default function Home() {
         </section>
 
         {/* Technology Stack Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/5 via-transparent to-purple-900/5" />
-          <div className="relative z-10">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="relative">
             <div className="text-center mb-16 space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 rounded-full border border-purple-500/20 mb-4">
-                <Cpu className="w-4 h-4 text-purple-400" />
-                <span className="text-sm font-medium text-purple-400">Technology Stack</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 mb-4">
+                <Cpu className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium text-primary">Technology Stack</span>
               </div>
-              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
-                Built with <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Cutting-Edge</span> Technologies
+              <h2 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                Built with Excellence
               </h2>
-              <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              <p className="text-foreground/60 text-lg max-w-2xl mx-auto">
                 Leverage the latest tools and frameworks for optimal performance
               </p>
             </div>
@@ -480,14 +577,14 @@ export default function Home() {
               {technologies.map((tech, idx) => (
                 <div
                   key={idx}
-                  className="group relative p-6 bg-gray-900/40 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-gray-700 transition-all duration-300 hover:scale-105"
+                  className="group relative p-6 bg-gradient-to-b from-card to-card/50 border border-border/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-xl"
                 >
-                  <div className="text-center space-y-3">
-                    <div className="text-2xl mb-2">{tech.icon}</div>
-                    <div className="font-semibold text-white group-hover:text-blue-300 transition-colors">
+                  <div className="text-center space-y-4">
+                    <div className="text-3xl mb-2">{tech.icon}</div>
+                    <div className="font-semibold text-foreground group-hover:text-primary transition-colors">
                       {tech.name}
                     </div>
-                    <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
+                    <div className="text-xs text-foreground/60 group-hover:text-foreground/70 transition-colors">
                       {tech.description}
                     </div>
                   </div>
@@ -499,20 +596,25 @@ export default function Home() {
 
         {/* Benefits Section */}
         <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-          <div className="relative rounded-3xl overflow-hidden border border-border bg-gradient-to-br from-background to-secondary/20">
+          <div className="relative rounded-3xl overflow-hidden">
+            {/* Background gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
+            
+            {/* Grid pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(30deg,_var(--primary)_1px,_transparent_1px),linear-gradient(60deg,_var(--primary)_1px,_transparent_1px)] bg-[size:60px_60px] opacity-[0.02]" />
             
             <div className="relative z-10 p-12">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20">
                     <CheckCircle className="w-4 h-4 text-primary" />
                     <span className="text-sm font-medium text-primary">Cross‑Cutting Themes</span>
                   </div>
-                  <h2 className="text-4xl font-bold tracking-tight text-white">
-                    Final Dimension
+                  <h2 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                    Strategic Excellence
                   </h2>
-                  <p className="text-gray-400 text-lg">
-                    Strategic themes guiding every engagement and outcome
+                  <p className="text-foreground/60 text-lg">
+                    Guiding principles for every engagement and outcome
                   </p>
                 </div>
 
@@ -520,13 +622,13 @@ export default function Home() {
                   {benefits.map((benefit, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start gap-4 p-4 rounded-lg bg-gray-900/30 hover:bg-gray-900/50 transition-colors group"
+                      className="group p-4 rounded-xl bg-gradient-to-r from-white/5 to-transparent border border-white/10 hover:border-primary/30 transition-all duration-300"
                     >
-                      <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                        <CheckCircle className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-white group-hover:text-gray-100 transition-colors">
+                      <div className="flex items-start gap-4">
+                        <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all">
+                          <CheckCircle className="w-5 h-5 text-primary" />
+                        </div>
+                        <p className="text-foreground/80 group-hover:text-foreground transition-colors">
                           {benefit}
                         </p>
                       </div>
@@ -541,40 +643,37 @@ export default function Home() {
         {/* Process Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-500/10 rounded-full border border-violet-500/20 mb-4">
-              <BarChart className="w-4 h-4 text-violet-400" />
-              <span className="text-sm font-medium text-violet-400">Our Methodology</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 mb-4">
+              <BarChart className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Our Methodology</span>
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
-              A <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">Proven Process</span> for Excellence
+            <h2 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              Proven Process
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            <p className="text-foreground/60 text-lg max-w-2xl mx-auto">
               Systematic approach to delivering exceptional results
             </p>
           </div>
 
           <div className="relative">
             {/* Connection line */}
-            <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gray-800 to-transparent -translate-y-1/2" />
+            <div className="hidden lg:block absolute top-1/2 left-8 right-8 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent -translate-y-1/2" />
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
               {processSteps.map((step, idx) => (
-                <div
-                  key={idx}
-                  className="group relative"
-                >
-                  <div className="relative p-8 bg-gradient-to-b from-gray-900 to-black border border-gray-800 rounded-2xl hover:border-gray-700 transition-all duration-300 hover:scale-[1.02]">
+                <div key={idx} className="group relative">
+                  <div className="relative p-8 bg-gradient-to-b from-card to-card/50 border border-border/50 rounded-2xl hover:border-primary/50 transition-all duration-300 hover:scale-[1.02]">
                     {/* Step number */}
-                    <div className="absolute -top-4 -left-4 w-12 h-12 rounded-full bg-gradient-to-br from-violet-600 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    <div className={`absolute -top-4 -left-4 w-12 h-12 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
                       {step.step}
                     </div>
                     
                     <div className="space-y-4">
                       <div className="text-3xl mb-4">{step.icon}</div>
-                      <h3 className="text-xl font-semibold text-white group-hover:text-violet-300 transition-colors">
+                      <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
                         {step.title}
                       </h3>
-                      <p className="text-gray-400 group-hover:text-gray-300 transition-colors">
+                      <p className="text-foreground/60 group-hover:text-foreground/70 transition-colors">
                         {step.desc}
                       </p>
                     </div>
@@ -586,37 +685,37 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-          <div className="relative rounded-2xl overflow-hidden">
-            {/* Background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/20 to-primary/10" />
+        <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+          <div className="relative rounded-3xl overflow-hidden">
+            {/* Solid background - removed gradient per request */}
+            <div className="absolute inset-0 bg-primary" />
             
-            {/* Grid pattern */}
-            <div className="absolute inset-0 bg-grid-white/[0.02]" />
+            {/* Animated orbs */}
+            <div className="absolute top-1/4 -left-20 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-accent/20 rounded-full blur-3xl animate-pulse delay-1000" />
             
             <div className="relative z-10 p-8 lg:p-10 text-center">
-              <div className="max-w-2xl mx-auto space-y-6">
-                <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                  <Sparkles className="w-5 h-5 text-white" />
-                  <span className="text-sm font-medium text-white">Ready to Transform?</span>
+              <div className="max-w-2xl mx-auto space-y-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-primary shadow-sm border border-primary/10">
+                  <Sparkles className="w-5 h-5 text-primary" />
+                  <span className="text-sm font-medium">Ready to Transform?</span>
                 </div>
-                
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
-                  Let's Build Something <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">Amazing</span> Together
+
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+                  Let's Build Something <span className="text-white font-extrabold">Amazing</span> Together
                 </h2>
                 
-                <p className="text-lg text-gray-300/80 leading-relaxed">
+                <p className="text-base sm:text-lg text-white/80 leading-relaxed">
                   Schedule a consultation and discover how Techweight can accelerate your digital journey
                 </p>
                 
                 <div className="flex justify-center pt-6">
                   <Link
                     href="/contact"
-                    className="group relative px-8 py-3.5 bg-gradient-to-r from-primary to-accent rounded-full font-semibold text-primary-foreground hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:scale-[1.02] inline-flex items-center justify-center gap-3 overflow-hidden"
+                    className="group relative px-6 py-2.5 bg-white rounded-full font-semibold text-primary hover:shadow-md transition-all duration-200 hover:scale-[1.02] inline-flex items-center justify-center gap-3 overflow-hidden"
                   >
                     <span className="relative z-10">Contact Us</span>
                     <ArrowRight className="relative z-10 group-hover:translate-x-2 transition-transform" size={18} />
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </Link>
                 </div>
               </div>

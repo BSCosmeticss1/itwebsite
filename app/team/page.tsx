@@ -92,7 +92,7 @@ export default function Team() {
                       alt={member.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
 
                   {/* Content */}
@@ -154,15 +154,14 @@ export default function Team() {
 
         {/* Join Team CTA */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto animate-fade-in-up">
-          <div className="bg-gradient-to-r from-primary/20 to-accent/20 border border-primary/30 rounded-2xl p-12 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-shimmer opacity-30"></div>
+          <div className="bg-card border border-border rounded-2xl p-12 text-center relative overflow-hidden">
             <div className="relative z-10">
               <h2 className="text-3xl font-bold mb-4">Join Our Growing Team</h2>
               <p className="text-foreground/70 mb-8 max-w-2xl mx-auto">
                 We're always looking for talented professionals to join our team and help shape the future of enterprise
                 IT.
               </p>
-              <button className="px-8 py-3 bg-primary rounded-lg font-semibold text-primary-foreground hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 hover:scale-105 smooth-hover inline-flex items-center gap-2">
+              <button className="px-8 py-3 bg-primary rounded-lg font-semibold text-primary-foreground hover:shadow-lg transition-all duration-300 hover:scale-105 smooth-hover inline-flex items-center gap-2">
                 View Open Positions <ArrowRight size={20} />
               </button>
             </div>

@@ -90,8 +90,8 @@ export default function Services() {
                   className="group p-8 bg-card border border-border rounded-xl hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-2 cursor-pointer animate-fade-in-up smooth-hover"
                   style={{ animationDelay: `${idx * 0.08}s` }}
                 >
-                  <div className="mb-6 p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg w-fit group-hover:from-primary/20 group-hover:to-accent/20 transition-colors">
-                    <Icon className="text-primary group-hover:text-accent transition-colors" size={32} />
+                  <div className="mb-6 p-4 bg-primary/10 rounded-lg w-fit transition-colors">
+                    <Icon className="text-primary" size={32} />
                   </div>
                   <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                     {service.title}
@@ -148,15 +148,14 @@ export default function Services() {
 
         {/* Bottom CTA */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto animate-fade-in-up">
-          <div className="bg-gradient-to-r from-primary to-accent rounded-2xl p-12 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-shimmer opacity-30"></div>
+          <div className="bg-card border border-border rounded-2xl p-12 text-center relative overflow-hidden">
             <div className="relative z-10">
-              <h2 className="text-3xl font-bold mb-4 text-primary-foreground">Need a Custom Solution?</h2>
-              <p className="text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
+              <h2 className="text-3xl font-bold mb-4">Need a Custom Solution?</h2>
+              <p className="text-foreground/70 mb-8 max-w-2xl mx-auto">
                 Contact our team to discuss your specific requirements and how we can help you achieve your business
                 goals.
               </p>
-              <button className="px-8 py-3 bg-primary-foreground rounded-lg font-semibold text-primary hover:shadow-lg transition-all duration-300 hover:scale-105 smooth-hover inline-flex items-center gap-2">
+              <button className="px-8 py-3 bg-primary rounded-lg font-semibold text-primary-foreground hover:shadow-lg transition-all duration-300 hover:scale-105 smooth-hover inline-flex items-center gap-2">
                 Get in Touch <ArrowRight size={20} />
               </button>
             </div>
