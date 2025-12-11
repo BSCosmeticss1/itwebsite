@@ -2,7 +2,7 @@
 
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
-import { Sparkles, Target, CheckCircle, Shield, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const goals = [
@@ -64,10 +64,9 @@ export default function About() {
   return (
     <>
       <Navigation />
-      <main className="pt-24">
+      <main className="pt-0">
         <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20 mb-4">
-            <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">About TechWeighten</span>
           </div>
           <h1 className="text-5xl sm:text-6xl font-bold mb-4">TechWeighten – Vision & Mission</h1>
@@ -107,7 +106,6 @@ export default function About() {
         <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-accent/10 rounded-full border border-accent/20">
-              <Target className="w-4 h-4 text-accent" />
               <span className="text-sm font-medium text-accent">Strategic Goals</span>
             </div>
           </div>
@@ -117,9 +115,8 @@ export default function About() {
                 <h4 className="text-xl font-semibold mb-4">{g.title}</h4>
                 <ul className="space-y-2 text-foreground/70">
                   {g.points.map((p, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-primary mt-[2px]" />
-                      <span>{p}</span>
+                    <li key={i} className="text-foreground/70">
+                      {p}
                     </li>
                   ))}
                 </ul>
@@ -131,7 +128,6 @@ export default function About() {
         <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full border border-primary/20">
-              <Shield className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium text-primary">Slogan / Tagline Options</span>
             </div>
           </div>
@@ -141,9 +137,8 @@ export default function About() {
                 <h5 className="font-semibold mb-3">{group.group}</h5>
                 <ul className="space-y-2 text-foreground/70">
                   {group.items.map((t, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-accent mt-[2px]" />
-                      <span>{t}</span>
+                    <li key={i} className="text-foreground/70">
+                      {t}
                     </li>
                   ))}
                 </ul>
@@ -162,4 +157,3 @@ export default function About() {
     </>
   )
 }
-

@@ -68,7 +68,7 @@ export default function Team() {
   return (
     <>
       <Navigation />
-      <main className="pt-24">
+      <main className="pt-0">
         {/* Header */}
         <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center animate-fade-in-down">
           <h1 className="text-5xl sm:text-6xl font-bold mb-4 text-balance">Meet Our Team</h1>

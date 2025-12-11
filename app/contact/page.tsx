@@ -36,7 +36,7 @@ export default function Contact() {
   return (
     <>
       <Navigation />
-      <main className="pt-24">
+      <main className="pt-0">
         {/* Header */}
         <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center animate-fade-in-down">
           <h1 className="text-5xl sm:text-6xl font-bold mb-4">Get in Touch</h1>
@@ -141,7 +141,7 @@ export default function Contact() {
               height="100%"
               frameBorder="0"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0186066193437!2d-122.39916!3d37.78825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064eeeeeeef%3A0x59cd1e6e5c5e5c5e!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1234567890"
-              allowFullScreen=""
+              allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>

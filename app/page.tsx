@@ -5,100 +5,9 @@ import { Footer } from "@/components/footer"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Zap, Shield, TrendingUp, CheckCircle, Sparkles, Target, Globe, Clock, Users, BarChart, Cpu, Settings, Leaf, Layers, Building2, ChevronRight, Menu, X } from "lucide-react"
+import { ArrowRight, Zap, Shield, TrendingUp, CheckCircle, Sparkles, Target, Globe, Clock, Users, BarChart, Cpu, Settings, Leaf, Layers, Building2, ChevronRight, Award, Code, Database, Cloud, Server, Smartphone, Palette, Terminal, Wifi, ShieldCheck } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
-
-// Custom Navigation component matching the image design
-function ImageStyleNavigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Services", href: "/services" },
-    { name: "Projects", href: "/projects" },
-    { name: "Workshop", href: "/workshop" },
-    { name: "Careers", href: "/careers" },
-    { name: "Contact", href: "/contact" },
-  ]
-
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-24">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link href="/" aria-label="Techweight home" className="inline-flex items-center">
-              <Image src="/thujn.jpeg" alt="Techweight logo" width={96} height={96} className="rounded-full object-cover ring-4 ring-primary" />
-            </Link>
-          </div>
-
-          {/* Desktop Navigation Links - Centered */}
-          <div className="hidden md:flex items-center justify-center flex-1">
-            <div className="flex items-center space-x-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Desktop CTA Button */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link
-              href="/contact"
-              className="px-6 py-2 bg-primary text-white text-sm font-medium rounded-full hover:bg-primary/90 transition-colors"
-            >
-              Get Started
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {isMenuOpen && (
-          <div className="md:hidden border-t border-gray-100">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              ))}
-              <div className="pt-4 border-t border-gray-100">
-                <Link
-                  href="/contact"
-                  className="block px-3 py-2 bg-primary text-white text-center rounded-lg hover:bg-primary/90"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Get Started
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </nav>
-  )
-}
+import { cn } from "@/lib/utils"
 
 function AnimatedCounter({ value, suffix = '', duration = 1500 }: { value: number; suffix?: string; duration?: number }) {
   const [count, setCount] = useState(0)
@@ -124,8 +33,8 @@ function AnimatedCounter({ value, suffix = '', duration = 1500 }: { value: numbe
   }, [value, duration, started])
   
   return (
-    <div ref={ref} className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary via-primary/90 to-accent bg-clip-text text-transparent">
-      {count}{suffix}
+    <div ref={ref} className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 bg-clip-text text-transparent">
+      {count.toLocaleString()}{suffix}
     </div>
   )
 }
@@ -141,10 +50,22 @@ export default function Home() {
 
   useEffect(() => {
     if (!emblaApi) return
+    
+    const onSelect = () => {
+      setActiveSlide(emblaApi.selectedScrollSnap())
+    }
+    
+    emblaApi.on('select', onSelect)
+    onSelect()
+    
     const interval = setInterval(() => {
       emblaApi.scrollNext()
-    }, 5000)
-    return () => clearInterval(interval)
+    }, 6000)
+    
+    return () => {
+      clearInterval(interval)
+      emblaApi.off('select', onSelect)
+    }
   }, [emblaApi])
 
   const features = [
@@ -152,150 +73,161 @@ export default function Home() {
       icon: Sparkles,
       title: "Innovative Problem Solving",
       description: "Engineer solutions beyond specs to streamline workflows, cut costs, and scale.",
-      gradient: "from-primary to-accent",
+      gradient: "from-blue-600 to-cyan-500",
     },
     {
       icon: TrendingUp,
       title: "Lifecycle Optimization",
-      description: "Optimize from concept to post‑implementation with continuous improvements and efficiency.",
-      gradient: "from-primary to-accent",
+      description: "Optimize from concept to post‑implementation with continuous improvements.",
+      gradient: "from-purple-600 to-pink-500",
     },
     {
       icon: Users,
-      title: "Collaboration",
+      title: "Collaboration First",
       description: "Co‑develop with your teams to integrate with current processes and future needs.",
-      gradient: "from-primary to-accent",
+      gradient: "from-emerald-600 to-teal-500",
     },
     {
       icon: Cpu,
-      title: "Technology Integration",
+      title: "AI Integration",
       description: "AI automation and digital twins for predictive maintenance and added value.",
-      gradient: "from-primary to-accent",
+      gradient: "from-orange-600 to-amber-500",
     },
   ]
 
   const metrics = [
-    { label: "Global Clients", count: 500, suffix: "+", icon: Globe },
-    { label: "Successful Projects", count: 2000, suffix: "+", icon: Target },
-    { label: "Years Experience", count: 15, suffix: "+", icon: Clock },
-    { label: "Team Experts", count: 250, suffix: "+", icon: Users },
+    { label: "Global Clients", count: 500, suffix: "+", icon: Globe, color: "from-blue-600 to-cyan-500" },
+    { label: "Successful Projects", count: 2000, suffix: "+", icon: Award, color: "from-purple-600 to-pink-500" },
+    { label: "Years Experience", count: 15, suffix: "+", icon: Clock, color: "from-emerald-600 to-teal-500" },
+    { label: "Team Experts", count: 250, suffix: "+", icon: Users, color: "from-orange-600 to-amber-500" },
   ]
 
   const technologies = [
-    { name: "AWS", description: "Cloud Infrastructure", icon: "☁️", color: "from-orange-500 to-yellow-500" },
-    { name: "Kubernetes", description: "Container Orchestration", icon: "⚓", color: "from-blue-500 to-cyan-500" },
-    { name: "TensorFlow", description: "Machine Learning", icon: "🧠", color: "from-orange-600 to-yellow-600" },
-    { name: "React", description: "Frontend Development", icon: "⚛️", color: "from-cyan-500 to-blue-500" },
-    { name: "Node.js", description: "Backend Services", icon: "🚀", color: "from-green-500 to-emerald-500" },
-    { name: "PostgreSQL", description: "Data Management", icon: "🗄️", color: "from-blue-600 to-indigo-600" },
-    { name: "Redis", description: "Caching Layer", icon: "⚡", color: "from-red-500 to-orange-500" },
-    { name: "Docker", description: "Containerization", icon: "🐳", color: "from-blue-400 to-cyan-400" },
+    { name: "AWS", description: "Cloud Infrastructure", icon: Cloud, color: "from-orange-500 to-yellow-500" },
+    { name: "Kubernetes", description: "Container Orchestration", icon: Server, color: "from-blue-500 to-cyan-500" },
+    { name: "TensorFlow", description: "Machine Learning", icon: Cpu, color: "from-orange-600 to-yellow-600" },
+    { name: "React", description: "Frontend Development", icon: Code, color: "from-cyan-500 to-blue-500" },
+    { name: "Node.js", description: "Backend Services", icon: Terminal, color: "from-green-500 to-emerald-500" },
+    { name: "PostgreSQL", description: "Data Management", icon: Database, color: "from-blue-600 to-indigo-600" },
+    { name: "Redis", description: "Caching Layer", icon: Zap, color: "from-red-500 to-orange-500" },
+    { name: "Docker", description: "Containerization", icon: Server, color: "from-blue-400 to-cyan-400" },
   ]
 
   const heroSlides = [
     {
       title: "Techweight – Empowering Businesses with Technology",
+      subtitle: "Bring out the best in your business with Techweighten",
       image: "/fintech-office-dashboard.jpg"
     },
     {
       title: "Your business is our business.",
+      subtitle: "Bring out the best in your business with Techweighten",
       image: "/professional-male-solutions-architect.jpg"
     },
     {
       title: "What Makes Us Different (USP)",
+      subtitle: "Bring out the best in your business with Techweighten",
       image: "/manufacturing-smart-factory.jpg"
     },
     {
       title: "We ensure 99% uptime",
-      image: "/professional-female-cloud-engineer.jpg"
-    },
-    {
-      title: "Bring out the best in your business with Techweighten",
+      subtitle: "Bring out the best in your business with Techweighten",
       image: "/retail-store-technology.png"
-    }
+    },
   ]
 
   const benefits = [
-    "Solutions designed for today and tomorrow, adaptable to advancements and evolving standards.",
-    "International best practices delivered with the flexibility to meet local needs.",
-    "Long‑term collaboration focused on innovation and continuous improvement.",
+    "Future-proof solutions adaptable to technological advancements and evolving standards.",
+    "International best practices delivered with local market flexibility.",
+    "Long‑term partnership focused on continuous innovation and improvement.",
   ]
 
   const serviceScope = [
     {
-      icon: Layers,
-      title: "IT Infrastructure Setup & Deployment",
+      icon: Server,
+      title: "Infrastructure & Cloud",
       points: [
-        "Server and network installation and configuration",
-        "Router, switch, and firewall setup",
-        "Endpoint antivirus deployment and malware elimination",
-        "Email platform setup and migration",
-        "Office 365 or Zoho cloud system deployment",
+        "Cloud migration & optimization",
+        "Network architecture & security",
+        "Server management & scaling",
+        "Disaster recovery solutions",
       ],
+      color: "from-blue-600 to-cyan-500",
     },
     {
-      icon: Building2,
-      title: "Hardware & Equipment Supply",
+      icon: Smartphone,
+      title: "Digital Products",
       points: [
-        "Supply and configuration of laptops, desktops, printers, accessories",
-        "Access control and CCTV systems installation and maintenance",
-        "IP phones or intercom systems integration",
-        "Time & attendance systems setup",
+        "Mobile & web applications",
+        "UI/UX design systems",
+        "Progressive web apps",
+        "Cross-platform solutions",
       ],
+      color: "from-purple-600 to-pink-500",
     },
     {
-      icon: Cpu,
-      title: "Software & Application Deployment",
+      icon: Database,
+      title: "Data & Analytics",
       points: [
-        "Installation and configuration of enterprise applications",
-        "Custom software delivery and integrations",
-        "Licensing management and updates",
+        "Business intelligence",
+        "Data warehouse solutions",
+        "Real-time analytics",
+        "Predictive modeling",
       ],
+      color: "from-emerald-600 to-teal-500",
     },
     {
-      icon: Sparkles,
-      title: "Website and Software Development",
+      icon: ShieldCheck,
+      title: "Security & Compliance",
       points: [
-        "Corporate website design and hosting",
-        "Web and mobile application development",
-        "UI/UX design and optimisation",
+        "Security audits & testing",
+        "Compliance frameworks",
+        "Threat detection systems",
+        "Data protection strategies",
       ],
+      color: "from-orange-600 to-amber-500",
     },
     {
-      icon: Shield,
-      title: "IT Support and Maintenance",
+      icon: Wifi,
+      title: "IoT & Automation",
       points: [
-        "Preventive and corrective maintenance",
-        "Troubleshooting and system upgrades",
-        "Remote and on‑site support services",
+        "Smart system integration",
+        "Process automation",
+        "IoT device management",
+        "Smart infrastructure",
       ],
+      color: "from-indigo-600 to-purple-500",
     },
     {
-      icon: Target,
-      title: "IT Consultancy and Advisory",
+      icon: BarChart,
+      title: "Consulting & Strategy",
       points: [
-        "IT policy development and process documentation",
-        "Technology audit and risk assessment",
-        "Strategic IT planning and digital transformation advisory",
+        "Digital transformation",
+        "Technology roadmapping",
+        "Process optimization",
+        "Innovation workshops",
       ],
+      color: "from-rose-600 to-pink-500",
     },
   ]
 
   const processSteps = [
-    { step: "01", title: "Discovery", desc: "Deep dive into your business needs and goals", icon: "🔍", color: "from-blue-500 to-cyan-500" },
-    { step: "02", title: "Strategy", desc: "Architect comprehensive, scalable solutions", icon: "📐", color: "from-purple-500 to-pink-500" },
-    { step: "03", title: "Execution", desc: "Precision implementation with agile methodology", icon: "⚡", color: "from-orange-500 to-yellow-500" },
-    { step: "04", title: "Support", desc: "Continuous optimization and growth partnership", icon: "🔄", color: "from-green-500 to-emerald-500" },
+    { step: "01", title: "Discover", desc: "Deep dive into your business needs and goals", icon: "🔍", color: "from-blue-600 to-cyan-500" },
+    { step: "02", title: "Design", desc: "Architect comprehensive, scalable solutions", icon: "📐", color: "from-purple-600 to-pink-500" },
+    { step: "03", title: "Develop", desc: "Agile implementation with precision engineering", icon: "⚡", color: "from-emerald-600 to-teal-500" },
+    { step: "04", title: "Deploy", desc: "Seamless launch with continuous optimization", icon: "🚀", color: "from-orange-600 to-amber-500" },
   ]
 
   if (!mounted) return null
 
   return (
     <>
-      <ImageStyleNavigation />
-      <main className="pt-24 bg-background">
-        {/* Hero Section with Carousel */}
-        <section className="relative min-h-[63vh] overflow-hidden">
+      <Navigation />
+      <main className="pt-0">
+        {/* Hero Section */}
+        <section className="relative min-h-[90vh] overflow-hidden bg-background">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.12)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(16,185,129,0.08)_0%,transparent_50%)]" />
+          
           <Carousel
             setApi={setEmblaApi}
             className="w-full h-full"
@@ -306,80 +238,88 @@ export default function Home() {
           >
             <CarouselContent className="h-full">
               {heroSlides.map((slide, index) => (
-                <CarouselItem key={index} className="relative min-h-[63vh] flex items-center justify-center">
-                  {/* Background Image */}
+                <CarouselItem key={index} className="relative min-h-[90vh] flex items-center">
                   <div
-                    className="absolute inset-0 bg-cover bg-center"
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                     style={{
                       backgroundImage: `url("${slide.image}")`,
                     }}
                   >
-                    {/* Blue overlay for brand look */}
-                    <div className="absolute inset-0 bg-blue-900/60" />
-
-                    {/* Subtle blue gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 via-blue-700/50 to-blue-600/30" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/80 to-background/60" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
                   </div>
 
-                  {/* Content */}
-                  <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <div className="max-w-4xl mx-auto space-y-8">
-                      {/* Main Headline */}
-                      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight">
+                  <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-3xl space-y-8">
+                      
+
+                      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight tracking-tight">
                         {slide.title}
                       </h1>
 
-                      {/* Subtitle */}
-                      <p className="text-lg sm:text-xl text-gray-200 font-light max-w-2xl mx-auto leading-relaxed">
-                        Trusted by industry leaders worldwide
+                      <p className="text-xl text-foreground/70 font-light max-w-2xl leading-relaxed">
+                        {slide.subtitle}
                       </p>
 
-                      {/* CTA Buttons */}
-                      <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+                      <div className="flex flex-col sm:flex-row gap-4 pt-8">
                         <Link
                           href="/contact"
-                          className="group relative px-8 py-3.5 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full font-semibold hover:shadow-2xl hover:shadow-orange-600/30 transition-all duration-300 hover:scale-105 inline-flex items-center justify-center gap-3"
+                          className="group relative px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] inline-flex items-center justify-center gap-3"
                         >
                           <span>Get Started</span>
                           <ArrowRight className="group-hover:translate-x-1 transition-transform" size={20} />
                         </Link>
 
                         <Link
-                          href="/contact"
-                          className="px-8 py-3.5 bg-orange-600 text-white rounded-full font-semibold hover:bg-orange-700 transition-all duration-300 inline-flex items-center justify-center"
+                          href="/services"
+                          className="px-8 py-4 bg-muted/30 backdrop-blur-sm text-foreground rounded-lg font-semibold hover:bg-muted/50 transition-all duration-300 inline-flex items-center justify-center border border-border"
                         >
-                          Contact
+                          Our Services
                         </Link>
                       </div>
-
-                      {/* Additional link removed per request */}
                     </div>
                   </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="left-4" />
-            <CarouselNext className="right-4" />
+            
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+              {heroSlides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => emblaApi?.scrollTo(index)}
+                  className={cn(
+                    "w-2 h-2 rounded-full transition-all duration-300 border border-border",
+                    activeSlide === index 
+                      ? "w-8 bg-primary" 
+                      : "bg-muted hover:bg-muted/70"
+                  )}
+                />
+              ))}
+            </div>
+            
+            <CarouselPrevious className="left-4 bg-muted/30 backdrop-blur-sm border-border text-foreground hover:bg-muted/50" />
+            <CarouselNext className="right-4 bg-muted/30 backdrop-blur-sm border-border text-foreground hover:bg-muted/50" />
           </Carousel>
-
-          {/* Scroll indicator removed */}
         </section>
 
-        {/* Keep the rest of your existing sections */}
         {/* Metrics Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {metrics.map((metric, idx) => {
               const Icon = metric.icon
               return (
                 <div 
                   key={idx} 
-                  className="group p-8 bg-gradient-to-b from-card to-card/50 backdrop-blur-sm border border-border/50 rounded-2xl hover:border-primary/50 transition-all duration-500 hover:scale-[1.03] hover:shadow-xl hover:shadow-primary/10"
-                  style={{ animationDelay: `${idx * 0.1}s` }}
+                  className="group p-8 bg-card rounded-2xl border border-border shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
+                  style={{ 
+                    animationDelay: `${idx * 0.1}s`,
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.05)'
+                  }}
                 >
                   <div className="flex items-center justify-between mb-6">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all">
-                      <Icon className="text-primary group-hover:scale-110 transition-transform" size={24} />
+                    <div className={`p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-all`}>
+                      <Icon className={`text-primary`} size={24} />
                     </div>
                     <AnimatedCounter value={metric.count} suffix={metric.suffix} />
                   </div>
@@ -392,112 +332,39 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Service Overview */}
+        {/* Features Section */}
         <section className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          {/* Background decoration */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
           
           <div className="relative z-10 text-center mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 mb-2">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Service Overview</span>
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
-              Comprehensive IT Solutions
-            </h2>
-            <p className="text-foreground/60 text-lg max-w-3xl mx-auto">
-              Tailored for the evolving needs of modern businesses
-            </p>
-          </div>
-
-          <div className="relative z-10 grid lg:grid-cols-2 gap-8 items-start">
-            <div className="space-y-6 p-8 rounded-3xl bg-gradient-to-br from-card to-card/50 border border-border/50 backdrop-blur-sm shadow-xl">
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Our Approach
-                </h3>
-                <div className="space-y-4 text-foreground/70">
-                  <p className="leading-relaxed">
-                    Techweight Technologies Enterprises is a technology consulting firm specialised in delivering innovative and efficient IT solutions tailored to our clients' operational, technical, and business goals.
-                  </p>
-                  <p className="leading-relaxed">
-                    We understand the critical role of technology in driving business success, and we are committed to helping organisations achieve seamless IT operations through effective system delivery, deployment, and support.
-                  </p>
-                  <p className="leading-relaxed">
-                    In today's fast‑evolving technological landscape, the success of any project hinges on robust, innovative, and sustainable IT solutions. Our IT team is committed to delivering high‑performance results tailored to your specific requirements.
-                  </p>
-                </div>
-              </div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full border border-blue-100 mb-2">
               
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors group"
-              >
-                <span className="font-medium">Learn more about us</span>
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              <span className="text-sm font-medium text-blue-600">Our Approach</span>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {[
-                { icon: Settings, title: "Tailored Design & Development", desc: "Solutions aligned to operational goals through close collaboration.", color: "from-blue-500/10 to-cyan-500/10" },
-                { icon: Cpu, title: "Cutting‑edge Technology", desc: "Latest tools and software for precision, efficiency, and innovation.", color: "from-purple-500/10 to-pink-500/10" },
-                { icon: Leaf, title: "Sustainability Focus", desc: "Designed to minimise environmental impact while maximising efficiency.", color: "from-green-500/10 to-emerald-500/10" },
-                { icon: Building2, title: "Cross‑Industry Expertise", desc: "Trusted across manufacturing, oil & gas, and diverse sectors.", color: "from-orange-500/10 to-yellow-500/10" },
-              ].map((item, idx) => {
-                const Icon = item.icon
-                return (
-                  <div key={idx} className="group p-6 rounded-2xl border border-border/50 bg-gradient-to-b from-card/50 to-card hover:border-primary/50 hover:shadow-lg transition-all duration-300">
-                    <div className={`mb-4 p-3 rounded-xl bg-gradient-to-br ${item.color} w-fit`}>
-                      <Icon className="text-primary" size={22} />
-                    </div>
-                    <h4 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors">
-                      {item.title}
-                    </h4>
-                    <p className="text-foreground/60 text-sm leading-relaxed">
-                      {item.desc}
-                    </p>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="text-center mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 mb-4">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Why Choose Techweight</span>
-            </div>
-            <h2 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Strategic Excellence
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              Strategic Technology Partnership
             </h2>
-            <p className="text-foreground/60 text-lg max-w-2xl mx-auto">
-              Innovation, lifecycle optimization, collaboration, and seamless technology integration
+            <p className="text-foreground/70 text-lg max-w-2xl mx-auto">
+              We combine innovation with execution to deliver measurable business impact
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, idx) => {
               const Icon = feature.icon
               return (
                 <div
                   key={idx}
-                  className="group relative p-8 bg-gradient-to-b from-card to-card/50 border border-border/50 rounded-2xl hover:border-primary/50 transition-all duration-500 hover:scale-[1.02] overflow-hidden"
+                  className="group relative p-8 bg-card rounded-2xl border border-border shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
                 >
-                  {/* Animated gradient border */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
-                  
                   <div className="relative z-10">
-                    <div className="mb-6 p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 w-fit">
-                      <Icon className="text-primary" size={24} />
+                    <div className={`mb-6 p-4 rounded-xl bg-primary/10 w-fit`}>
+                      <Icon className={`text-primary`} size={28} />
                     </div>
-                    <h3 className="text-xl font-semibold mb-4 group-hover:text-primary transition-colors">
+                    <h3 className="text-xl font-semibold mb-4 text-foreground">
                       {feature.title}
                     </h3>
-                    <p className="text-foreground/60 group-hover:text-foreground/70 transition-colors leading-relaxed">
+                    <p className="text-foreground/70 leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
@@ -507,135 +374,99 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Scope of Services */}
-        <section className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          {/* Background pattern */}
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
-          
-          <div className="relative z-10 text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 mb-4">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Scope of Services</span>
+        {/* Services Section */}
+        <section className="relative py-20 bg-muted/30">
+          <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div className="text-center mb-16 space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full border border-blue-100 mb-4">
+                
+                <span className="text-sm font-medium text-blue-600">Our Services</span>
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                Comprehensive Digital Solutions
+              </h2>
+              <p className="text-foreground/70 max-w-2xl mx-auto mt-4 text-lg">
+                End-to-end services designed to transform your digital capabilities
+              </p>
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
-              Full‑stack IT Delivery
-            </h2>
-            <p className="text-foreground/60 max-w-3xl mx-auto mt-4 text-lg">
-              Techweight Technologies offers comprehensive services across infrastructure, software, support, and advisory.
-            </p>
-          </div>
 
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {serviceScope.map((svc, idx) => {
-              const Icon = svc.icon
-              return (
-                <div 
-                  key={idx} 
-                  className="group p-7 rounded-2xl border border-border/50 bg-gradient-to-b from-card/50 to-card hover:border-primary/50 hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
-                >
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10">
-                      <Icon className="text-primary" size={24} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {serviceScope.map((svc, idx) => {
+                const Icon = svc.icon
+                return (
+                  <div 
+                    key={idx} 
+                    className="group p-8 bg-card rounded-2xl border border-border shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+                  >
+                    <div className={`mb-6 p-4 rounded-xl bg-primary/10 w-fit`}>
+                      <Icon className="text-primary" size={28} />
                     </div>
-                    <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">
+                    <h3 className="text-xl font-semibold mb-6 text-foreground transition-all">
                       {svc.title}
                     </h3>
+                    <ul className="space-y-3">
+                      {svc.points.map((p, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <div className={`mt-1 p-1 rounded-full bg-primary/10`}>
+                            <CheckCircle className={`w-3 h-3 text-primary`} />
+                          </div>
+                          <span className="text-foreground/70 text-sm">{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    
+                    <Link
+                      href="/services"
+                      className="mt-8 inline-flex items-center gap-2 text-primary hover:opacity-80 transition-colors group"
+                    >
+                      <span className="font-medium text-sm">Learn more</span>
+                      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </Link>
                   </div>
-                  <ul className="space-y-3">
-                    {svc.points.map((p, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <div className="mt-1 p-1 rounded-full bg-primary/10">
-                          <CheckCircle className="w-3 h-3 text-primary" />
-                        </div>
-                        <span className="text-foreground/70 text-sm">{p}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
         </section>
 
-        {/* Technology Stack Section */}
+        {/* Technology Stack */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="relative">
             <div className="text-center mb-16 space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 mb-4">
-                <Cpu className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-primary">Technology Stack</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full border border-blue-100 mb-4">
+                
+                <span className="text-sm font-medium text-blue-600">Technology Stack</span>
               </div>
-              <h2 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                Built with Excellence
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                Built with Modern Excellence
               </h2>
-              <p className="text-foreground/60 text-lg max-w-2xl mx-auto">
-                Leverage the latest tools and frameworks for optimal performance
+              <p className="text-foreground/70 text-lg max-w-2xl mx-auto">
+                Leveraging the latest tools and frameworks for optimal performance
               </p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-              {technologies.map((tech, idx) => (
-                <div
-                  key={idx}
-                  className="group relative p-6 bg-gradient-to-b from-card to-card/50 border border-border/50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-xl"
-                >
-                  <div className="text-center space-y-4">
-                    <div className="text-3xl mb-2">{tech.icon}</div>
-                    <div className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {tech.name}
-                    </div>
-                    <div className="text-xs text-foreground/60 group-hover:text-foreground/70 transition-colors">
-                      {tech.description}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Benefits Section */}
-        <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-          <div className="relative rounded-3xl overflow-hidden">
-            {/* Background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
-            
-            {/* Grid pattern */}
-            <div className="absolute inset-0 bg-[linear-gradient(30deg,_var(--primary)_1px,_transparent_1px),linear-gradient(60deg,_var(--primary)_1px,_transparent_1px)] bg-[size:60px_60px] opacity-[0.02]" />
-            
-            <div className="relative z-10 p-12">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div className="space-y-6">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20">
-                    <CheckCircle className="w-4 h-4 text-primary" />
-                    <span className="text-sm font-medium text-primary">Cross‑Cutting Themes</span>
-                  </div>
-                  <h2 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                    Strategic Excellence
-                  </h2>
-                  <p className="text-foreground/60 text-lg">
-                    Guiding principles for every engagement and outcome
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  {benefits.map((benefit, idx) => (
-                    <div
-                      key={idx}
-                      className="group p-4 rounded-xl bg-gradient-to-r from-white/5 to-transparent border border-white/10 hover:border-primary/30 transition-all duration-300"
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all">
-                          <CheckCircle className="w-5 h-5 text-primary" />
-                        </div>
-                        <p className="text-foreground/80 group-hover:text-foreground transition-colors">
-                          {benefit}
-                        </p>
+              {technologies.map((tech, idx) => {
+                const Icon = tech.icon
+                return (
+                  <div
+                    key={idx}
+                    className="group relative p-6 bg-card rounded-xl border border-border shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                  >
+                    <div className="text-center space-y-4">
+                      <div className={`flex justify-center mb-2 p-3 rounded-lg bg-primary/10`}>
+                        <Icon className={`text-primary`} size={24} />
+                      </div>
+                      <div className="font-semibold text-foreground transition-all">
+                        {tech.name}
+                      </div>
+                      <div className="text-xs text-foreground/60">
+                        {tech.description}
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </section>
@@ -643,37 +474,35 @@ export default function Home() {
         {/* Process Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 mb-4">
-              <BarChart className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Our Methodology</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full border border-blue-100 mb-4">
+              <BarChart className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-blue-600">Our Process</span>
             </div>
-            <h2 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Proven Process
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              Proven Methodology
             </h2>
-            <p className="text-foreground/60 text-lg max-w-2xl mx-auto">
-              Systematic approach to delivering exceptional results
+            <p className="text-foreground/70 text-lg max-w-2xl mx-auto">
+              A systematic approach to delivering exceptional results
             </p>
           </div>
 
           <div className="relative">
-            {/* Connection line */}
-            <div className="hidden lg:block absolute top-1/2 left-8 right-8 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent -translate-y-1/2" />
+            <div className="hidden lg:block absolute top-1/2 left-8 right-8 h-0.5 bg-gradient-to-r from-blue-100 via-gray-200 to-gray-100 -translate-y-1/2" />
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
               {processSteps.map((step, idx) => (
                 <div key={idx} className="group relative">
-                  <div className="relative p-8 bg-gradient-to-b from-card to-card/50 border border-border/50 rounded-2xl hover:border-primary/50 transition-all duration-300 hover:scale-[1.02]">
-                    {/* Step number */}
-                    <div className={`absolute -top-4 -left-4 w-12 h-12 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
+                    <div className="relative p-8 bg-card rounded-2xl border border-border shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                    <div className={`absolute -top-4 left-8 w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg shadow-lg`}>
                       {step.step}
                     </div>
                     
                     <div className="space-y-4">
                       <div className="text-3xl mb-4">{step.icon}</div>
-                      <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
+                      <h3 className="text-xl font-semibold text-foreground">
                         {step.title}
                       </h3>
-                      <p className="text-foreground/60 group-hover:text-foreground/70 transition-colors">
+                      <p className="text-foreground/70">
                         {step.desc}
                       </p>
                     </div>
@@ -685,37 +514,41 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-          <div className="relative rounded-3xl overflow-hidden">
-            {/* Solid background - removed gradient per request */}
-            <div className="absolute inset-0 bg-primary" />
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="relative rounded-3xl overflow-hidden max-w-6xl mx-auto">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-accent" />
+            <div className="absolute top-0 -left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-0 -right-20 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
             
-            {/* Animated orbs */}
-            <div className="absolute top-1/4 -left-20 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-accent/20 rounded-full blur-3xl animate-pulse delay-1000" />
-            
-            <div className="relative z-10 p-8 lg:p-10 text-center">
-              <div className="max-w-2xl mx-auto space-y-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-primary shadow-sm border border-primary/10">
-                  <Sparkles className="w-5 h-5 text-primary" />
+            <div className="relative z-10 p-12 lg:p-16">
+              <div className="max-w-2xl mx-auto text-center space-y-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white">
+                  <Sparkles className="w-5 h-5" />
                   <span className="text-sm font-medium">Ready to Transform?</span>
                 </div>
 
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
-                  Let's Build Something <span className="text-white font-extrabold">Amazing</span> Together
+                <h2 className="text-4xl sm:text-5xl font-bold text-primary-foreground">
+                  Let's Build Something <span className="text-primary-foreground/90">Exceptional</span> Together
                 </h2>
                 
-                <p className="text-base sm:text-lg text-white/80 leading-relaxed">
-                  Schedule a consultation and discover how Techweight can accelerate your digital journey
+                <p className="text-lg text-primary-foreground/80 leading-relaxed">
+                  Schedule a consultation and discover how we can accelerate your digital transformation
                 </p>
                 
-                <div className="flex justify-center pt-6">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
                   <Link
                     href="/contact"
-                    className="group relative px-6 py-2.5 bg-white rounded-full font-semibold text-primary hover:shadow-md transition-all duration-200 hover:scale-[1.02] inline-flex items-center justify-center gap-3 overflow-hidden"
+                    className="group relative px-8 py-4 bg-white text-primary rounded-lg font-semibold hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] inline-flex items-center justify-center gap-3"
                   >
-                    <span className="relative z-10">Contact Us</span>
-                    <ArrowRight className="relative z-10 group-hover:translate-x-2 transition-transform" size={18} />
+                    <span className="relative">Start Your Journey</span>
+                    <ArrowRight className="relative group-hover:translate-x-2 transition-transform" size={20} />
+                  </Link>
+                  
+                  <Link
+                    href="/contact"
+                    className="px-8 py-4 bg-white/10 backdrop-blur-sm text-primary-foreground rounded-lg font-semibold hover:bg-white/20 transition-all duration-300 inline-flex items-center justify-center border border-white/20"
+                  >
+                    Book a Demo
                   </Link>
                 </div>
               </div>
